@@ -1,12 +1,5 @@
 # Plugin.Maui.FacebookAppEvents
 
-
-[![NuGet](https://img.shields.io/nuget/v/Plugin.Maui.FacebookAppEvents.svg)](https://www.nuget.org/packages/Plugin.Maui.FacebookAppEvents/)
-[![Downloads](https://img.shields.io/nuget/dt/Plugin.Maui.FacebookAppEvents)](https://www.nuget.org/packages/Plugin.Maui.FacebookAppEvents/)
-[![License: MIT](https://img.shields.io/badge/License-MIT-yellow.svg)](https://opensource.org/licenses/MIT)
-[![.NET](https://img.shields.io/badge/.NET-8.0+-blue.svg)](https://dotnet.microsoft.com/download)
-
-
 *Because implementing Facebook App Events shouldn't be this hard*
 
 [Get Started](#installation) • [Examples](#examples) • [Troubleshooting](#troubleshooting)
@@ -236,11 +229,43 @@ FacebookAppEventSender.SendEvents(event);
 
 This library respects user privacy:
 
-- **iOS 14+**: Shows the App Tracking Transparency dialog automatically
+- **iOS 14+**: Checks App Tracking Transparency status automatically
 - **Android**: Checks if user has limited ad tracking
 - **Both**: If users opt out, sends empty advertiser IDs and marks tracking as disabled
 
 No sketchy stuff, no personal data without consent.
+
+### Manual ATE Control (External ATT Handling)
+
+If your app handles the ATT dialog externally (e.g., to coordinate consent with Firebase Analytics or other SDKs), you can manually set the Advertiser Tracking Enabled (ATE) value:
+
+```csharp
+// In your AppDelegate.cs (iOS) after showing ATT dialog:
+using Plugin.Maui.FacebookAppEvents;
+
+ATTrackingManager.RequestTrackingAuthorization((status) =>
+{
+    var isAuthorized = status == ATTrackingManagerAuthorizationStatus.Authorized;
+    FacebookTrackingSettings.SetAdvertiserTrackingEnabled(isAuthorized);
+
+    // Now all Facebook events will use this ATE value
+});
+```
+
+**Why use this?**
+- iOS only allows showing the ATT dialog once per app install
+- If you show the dialog in AppDelegate (for Firebase, etc.), the SDK can't determine the result automatically
+- Manual ATE ensures the correct tracking status is sent with all events
+
+**Available methods:**
+| Method | Purpose |
+|--------|---------|
+| `FacebookTrackingSettings.SetAdvertiserTrackingEnabled(bool)` | Set ATE value after external ATT handling |
+| `FacebookTrackingSettings.ClearManualTracking()` | Revert to automatic ATT detection |
+| `FacebookTrackingSettings.HasManualTrackingValue` | Check if manual value is set |
+| `FacebookTrackingSettings.ManualTrackingValue` | Get current manual value (nullable) |
+
+**Note:** If `SetAdvertiserTrackingEnabled()` is never called, the SDK falls back to automatic ATT status detection (backward compatible).
 
 ## Troubleshooting
 
