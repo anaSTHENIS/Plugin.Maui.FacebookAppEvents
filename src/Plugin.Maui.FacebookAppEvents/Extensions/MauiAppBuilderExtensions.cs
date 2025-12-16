@@ -104,12 +104,21 @@ namespace Plugin.Maui.FacebookAppEvents.Extensions
             builder.Services.AddSingleton<FacebookAppEventSender>(provider =>
             {
                 var httpClient = new HttpClient();
-
-                // Apply HttpClient configuration if provided
                 options.ConfigureHttpClient?.Invoke(httpClient);
 
                 var advertiserIdService = provider.GetRequiredService<IAdvertiserIdService>();
-                return new FacebookAppEventSender(httpClient, options.AppId, options.ClientToken, advertiserIdService);
+                var sender = new FacebookAppEventSender(httpClient, options.AppId, options.ClientToken, advertiserIdService);
+
+                if (options.AutoLogAppLaunch)
+                {
+                    var activateEvent = FacebookAppEventFactory.CreateCustomEvent(
+                        eventName: "fb_mobile_activate_app"
+                    );
+
+                    _ = sender.SendEventsAsync(activateEvent);
+                }
+
+                return sender;
             });
 
             return builder;
@@ -135,5 +144,11 @@ namespace Plugin.Maui.FacebookAppEvents.Extensions
         /// Optional action to configure the HttpClient used for sending events.
         /// </summary>
         public Action<HttpClient>? ConfigureHttpClient { get; set; }
+
+        /// <summary>
+        /// When true, the plugin will automatically send a fb_mobile_activate_app
+        /// event once when the FacebookAppEventSender is created.
+        /// </summary>
+        public bool AutoLogAppLaunch { get; set; } = true;
     }
 }

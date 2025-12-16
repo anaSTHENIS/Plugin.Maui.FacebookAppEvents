@@ -51,7 +51,7 @@ public class AdvertiserIdService : IAdvertiserIdService
 			}
 
 			// iOS 14+ - Check ATT status directly (don't request/show dialog)
-			if(NSProcessInfo.ProcessInfo.IsOperatingSystemAtLeastVersion(new NSOperatingSystemVersion(14, 0, 0)))
+			if(NSProcessInfo.ProcessInfo.IsOperatingSystemAtLeastVersion(new NSOperatingSystemVersion(14, 2, 0)))
 			{
 				var status = ATTrackingManager.TrackingAuthorizationStatus;
 				var isAuthorized = status == ATTrackingManagerAuthorizationStatus.Authorized;
