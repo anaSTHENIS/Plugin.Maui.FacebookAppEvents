@@ -96,12 +96,21 @@ builder.UseFacebookEvents(options =>
 {
     options.AppId = "YOUR_APP_ID";
     options.ClientToken = "YOUR_CLIENT_TOKEN";
+    // Optional: automatically send fb_mobile_activate_app once
+    // when FacebookAppEventSender is created (enabled by default).
+    // This uses Facebook's standard app activation event name.[1]
+    options.AutoLogAppLaunch = true;
     options.ConfigureHttpClient = httpClient =>
     {
         httpClient.Timeout = TimeSpan.FromSeconds(15);
     };
 });
 ```
+
+### `AutoLogAppLaunch` is `true` by default
+
+This means that as soon as `FacebookAppEventSender` is created through the options overload, one `fb_mobile_activate_app` event is sent automatically, so Meta can see app activations without you having to log that event manually.
+
 
 <details>
 <summary><strong>Manual Setup (if you prefer DIY)</strong></summary>
