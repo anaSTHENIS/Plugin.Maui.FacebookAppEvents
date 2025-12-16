@@ -13,11 +13,11 @@
 		<!-- This is the key setting -->
 		<RootNamespace>Plugin.Maui.FacebookAppEvents</RootNamespace>
 		<AssemblyName>Plugin.Maui.FacebookAppEvents</AssemblyName>
-		
+
 		<!-- NuGet Package Metadata -->
 		<GeneratePackageOnBuild>true</GeneratePackageOnBuild>
 		<PackageId>Plugin.Maui.FacebookAppEvents</PackageId>
-		<Version>1.1.4</Version>
+		<Version>1.1.5</Version>
 		<IsPackable>True</IsPackable>
 		<Authors>anaSTHENIS</Authors>
 		<Company>anaSTHENIS</Company>
@@ -32,7 +32,7 @@
 		<RepositoryUrl>https://github.com/anaSTHENIS/Plugin.Maui.FacebookAppEvents</RepositoryUrl>
 		<RepositoryType>git</RepositoryType>
 		<Copyright>Copyright © 2025 anaSTHENIS</Copyright>
-		<PackageReleaseNotes>Fix on FacebookAppEventSender</PackageReleaseNotes>
+		<PackageReleaseNotes>Added FacebookTrackingSettings.SetAdvertiserTrackingEnabled() for manual ATE control when handling ATT externally</PackageReleaseNotes>
 
 		<!-- Documentation -->
 		<GenerateDocumentationFile>true</GenerateDocumentationFile>
@@ -70,6 +70,19 @@
 	<ItemGroup>
 		<None Include="README.md" Pack="true" PackagePath="\" />
 		<None Include="nugetfb.png" Pack="true" PackagePath="\" />
+	</ItemGroup>
+
+	<!-- Exclude Sample folder from compilation -->
+	<ItemGroup>
+		<Compile Remove="Sample\**" />
+		<None Remove="Sample\**" />
+		<Content Remove="Sample\**" />
+		<EmbeddedResource Remove="Sample\**" />
+		<MauiXaml Remove="Sample\**" />
+		<MauiAsset Remove="Sample\**" />
+		<MauiImage Remove="Sample\**" />
+		<MauiFont Remove="Sample\**" />
+		<MauiSplashScreen Remove="Sample\**" />
 	</ItemGroup>
 
 </Project>
