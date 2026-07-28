@@ -89,7 +89,7 @@ namespace Plugin.Maui.FacebookAppEvents.Events
             if (events == null || events.Length == 0)
                 throw new ArgumentNullException(nameof(events), "At least one FacebookAppEvent must be provided.");
 
-            var url = $"https://graph.facebook.com/v23.0/{_appId}/activities";
+            var url = $"https://graph.facebook.com/v25.0/{_appId}/activities";
 			
             var parameters = new Dictionary<string, string>
         {
